@@ -1,0 +1,243 @@
+let frames;
+const HZ = 0.5;    // number of redraw events per clock tick
+class CollissionSystem {
+    constructor(particles) {
+        this.interval;
+        this.pq;   // event priority queue
+        this.t=0;  // simulation clock time
+        this.particles = [...particles]; //defensive copy
+    }
+    // updates priority queue with all new events for a particle
+    predict(particleA, isRunning) {
+        if (particleA === null) return;
+        // particle-particle collisions
+        for (var i = 0; i < this.particles.length; i++) {
+            let dt = particleA.timeToHit(this.particles[i]);
+            if ((dt!==Infinity)&&isRunning)
+                this.pq.insert(new Event(this.t + dt, particleA, this.particles[i]));
+        }
+        // particle-wall collisions
+        let dtX = particleA.timeToHitVerticalWall();
+        let dtY = particleA.timeToHitHorizontalWall();
+        if (isRunning) this.pq.insert(new Event(this.t + dtX, particleA, null));
+        if (isRunning) this.pq.insert(new Event(this.t + dtY, null, particleA));
+    }
+    // redraw all particles
+    redraw(isRunning) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.draw_background()
+        for (var i = 0; i < this.particles.length; i++) {
+            this.particles[i].draw();
+            if(!isNaN(this.particles[i].radius)) {
+                this.checkCollition(player1, this.particles[i]);
+                if(mode2P) this.checkCollition(player2, this.particles[i]);
+            } else {
+                this.particles.splice(i,1)
+                i--;
+            }
+            player1.draw(this.t);
+            if(mode2P) player2.draw(this.t);
+        } 
+        if(mode2P) this.checkCollition(player1, player2);       
+        if (isRunning) {
+            this.pq.insert(new Event(this.t + 1.0 / HZ, null, null));
+        }
+    }
+    checkCollition(player, particle) {
+        if (player.isTouching(particle)) {
+        this.phagocytosis(player, particle)
+        }
+    }
+    printScore() {
+        ctx.font = "50px Arial"
+        ctx.fillStyle = "Red";
+        ctx.fillText(message, canvas.width/2 -130, canvas.height/2-30);
+    }
+    phagocytosis(cellA, cellB) {
+		// Determine bigger cell
+		let bigger = cellA;
+		let smaller = cellB;
+		if (cellB.radius > cellA.radius) {
+			bigger = cellB;
+			smaller = cellA;
+		}
+		// Overlap amount will affect transfer amount
+		let overlap = (cellA.radius + cellB.radius - cellA.getDistance(cellB)) / (2 * smaller.radius);
+		if (overlap > 1) overlap = 1;
+		// overlap *= overlap;
+		let mass_exchange = overlap * smaller.area() ;//overlap * smaller.area() * * (this.t/1000);	
+        smaller.radius -= mass_exchange / (2*Math.PI*smaller.radius) //smaller.radius > 2 ? mass_exchange / (2*Math.PI*smaller.radius) : 0; 
+        smaller.mass=2*Math.PI*smaller.radius*smaller.radius; 
+        bigger.radius += mass_exchange / (2*Math.PI*bigger.radius);
+        bigger.mass=2*Math.PI*bigger.radius*bigger.radius;
+	
+		// Check if we just killed one of the cells
+		if (smaller.radius <=2) {
+            smaller.radius = 0;
+			smaller.dead = true;
+            // If we just killed the player, callback.
+            console.log(cellA.constructor.name)
+			if (smaller === cellA && cellA.constructor.name === 'Player')
+                this.player_did_die();
+            if (smaller === cellB && cellB.constructor.name === 'Player')
+                this.player_did_die();
+        }   
+    };
+    player_did_die(){
+        clearInterval(this.interval)
+        ctx.font = "50px Arial"
+        ctx.fillStyle = "Red";
+        let message;
+        console.log("ayuda")
+        if(!mode2P){
+            message = "Game Over";
+        } 
+        else {
+            let s = player1.dead ? 2 : 1;
+            message =`player ${s} wins!!!`
+        }
+        ctx.fillText(message, canvas.width/2 -130, canvas.height/2-30);
+        ctx.restore();
+    }
+    draw_background(){
+        let backgroundGradient = ctx.createLinearGradient(0,0,0, canvas.height);
+        backgroundGradient.addColorStop(0,"#2B180F");
+        backgroundGradient.addColorStop(1,"#000000");
+        ctx.fillStyle = backgroundGradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
+    
+    /**
+     * Simulates the system of particles for the specified amount of time.
+     *
+     * @param  isRunning boolean indicating if the simulation is running 
+     */
+    simulate(isRunning) {
+        // initialize PQ with collision events and redraw event
+        this.pq = new MinPQ();
+        for (let i = 0; i < this.particles.length; i++) {
+            this.predict(this.particles[i], isRunning);
+        }
+        
+        this.pq.insert(new Event(0, null, null));        // redraw event
+        // the main event-driven simulation loop
+        const loop = ()=>{            
+            frames++;
+            // get impending event, discard if invalidated
+            let e = this.pq.delMin();
+            // console.log(this.pq.size())
+            if (!e.isValid()) return;
+            let a = e.particleA;
+            let b = e.particleB;
+            // physical collision, so update positions, and then simulation clock
+            for (var i = 0; i < this.particles.length; i++){ 
+                this.particles[i].move(e.time - this.t);
+            }
+            
+            this.t = e.time;            
+            // process event
+            if      (a !== null && b !== null) a.bounceOff(b);              // particle-particle collision
+            else if (a !== null && b === null) a.bounceOffVerticalWall();   // particle-wall collision
+            else if (a === null && b !== null) b.bounceOffHorizontalWall(); // particle-wall collision
+            else if (a === null && b === null) this.redraw(isRunning);      // redraw event
+            
+            // update the priority queue with new collisions involving a or b
+            this.predict(a, isRunning);
+            this.predict(b, isRunning);
+            /////
+            document.onkeydown = (e) => {
+                let minimumRadius = 10;
+                //   Checking if Arrow keys are pressed
+                e.preventDefault();
+                // console.log(e.target)
+                switch (e.keyCode) {
+                    case 37:
+                        if(player1.radius < minimumRadius) return
+                        let newCellLeft = player1.propel_from(-1,0);
+                        this.particles.push(newCellLeft)
+                        this.predict(newCellLeft, isRunning);
+                        break;
+                    case 38:
+                        if(player1.radius < minimumRadius) return
+                        let newCellUp = player1.propel_from(0,1)
+                        this.particles.push(newCellUp)
+                        this.predict(newCellUp, isRunning);
+                        break;
+                    case 39:
+                        if(player1.radius < minimumRadius) return
+                        let newCellRight = player1.propel_from(1,0)
+                        this.particles.push(newCellRight)
+                        this.predict(newCellRight, isRunning);
+                        break;
+                    case 40:
+                        if(player1.radius < minimumRadius) return
+                        let newCellDown = player1.propel_from(0,-1)
+                        this.particles.push(newCellDown)
+                        this.predict(newCellDown, isRunning);
+                        break;
+                    case 65:
+                        if(player2.radius < minimumRadius) return
+                        let newCellLeft2 = player2.propel_from(-1,0);
+                        this.particles.push(newCellLeft2)
+                        this.predict(newCellLeft2, isRunning);
+                        break;
+                    case 87:
+                        if(player2.radius < minimumRadius) return
+                        let newCellUp2 = player2.propel_from(0,1)
+                        this.particles.push(newCellUp2)
+                        this.predict(newCellUp2, isRunning);
+                        break;
+                    case 68:
+                        if(player2.radius < minimumRadius) return
+                        let newCellRight2 = player2.propel_from(1,0)
+                        this.particles.push(newCellRight2)
+                        this.predict(newCellRight2, isRunning);
+                        break;
+                    case 83:
+                        if(player2.radius < minimumRadius) return
+                        let newCellDown2 = player2.propel_from(0,-1)
+                        this.particles.push(newCellDown2)
+                        this.predict(newCellDown2, isRunning);
+                        break;
+                    default:
+                        break;
+                    }
+              };
+        }
+        this.interval = setInterval(loop, 1000 / 60);
+    }
+}
+/***************************************************************************
+ *  An event during a particle collision simulation. Each event contains
+ *  the time at which it will occur (assuming no supervening actions)
+ *  and the particles a and b involved.
+ *
+ *    -  a and b both null:      redraw event
+ *    -  a null, b not null:     collision with vertical wall
+ *    -  a not null, b null:     collision with horizontal wall
+ *    -  a and b both not null:  binary collision between a and b
+ *
+ ***************************************************************************/
+class Event  {
+    // create a new event to occur at time t involving a and b
+    constructor(t, particleA, particleB) {
+        this.time = t;                    // time that event is scheduled to occur
+        // particles involved in event, possibly null
+        this.particleA    = particleA;
+        this.particleB    = particleB;
+        // countA, countB;  // collision counts at event creation
+        if (particleA !== null) this.countA = particleA.counter();
+        else           this.countA = -1;
+        if (particleB !== null) this.countB = particleB.counter();
+        else           this.countB = -1;
+    }
+
+    // has any collision occurred between when event was created and now?
+    isValid() {
+        if (this.particleA !== null && this.particleA.counter() !== this.countA) return false;
+        if (this.particleB !== null && this.particleB.counter() !== this.countB) return false;
+        if (this.particleA !== null && this.particleA.dead) return false;
+        if (this.particleB !== null && this.particleB.dead) return false;
+        return true;
+    }
+}
