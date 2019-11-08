@@ -86,12 +86,14 @@ class CollissionSystem {
     };
 
     player_win() {
-        ctx.font = "60px Arial"
-        ctx.fillStyle = "green";
-        ctx.shadowColor = "red";
-        ctx.shadowBlur = 40;
-        ctx.fillText("You win!!!", canvas.width/2 -150, canvas.height/2);
-        ctx.restore();
+        if(this.particles.length === 0){
+            ctx.font = "60px Arial"
+            ctx.fillStyle = "green";
+            ctx.shadowColor = "red";
+            ctx.shadowBlur = 40;
+            ctx.fillText("You win!!!", canvas.width/2 -150, canvas.height/2);
+            ctx.restore();
+        }        
     }
     player_did_die(){
         clearInterval(this.interval)
