@@ -1,53 +1,81 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:700|Varela+Round&display=swap');
 body, html {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+    background-color: black;
 }
 
 #splash-screen{
     display:flex;
-}
-
-section{
-    width: 100%;
-    height: 100%;
-    /* background-color: red; */
-}
-
-a {
-    text-decoration: none;
-}
-#video {
-    width: 50%;
-    height: 100%; 
-
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #menu {
     width: 50%;
     height: 100%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-/* #myVideo {
-    positio n: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: fill;
-  } */
+#buttons{
+    display: flex;
+    justify-content: space-between;
+}
 
-/* @media (min-aspect-ratio: 16/9) {
-    .fullscreen-bg__video {
-      width: 100%;
-      height: 100%;
-    }
+a {
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px 50px;
+    margin: 40px;
+
+    text-decoration: none;
+
+    font-family: 'Varela Round', sans-serif;
+    font-size: 3em;
+}
+
+.vs {
+    padding: 10px 90px;
+}
+p {
+    text-align: center;
+    color: red;
+    font-size: 3em;
+}
+
+.glow {
+    font-size: 60px;
+    color: #fff;
+    text-align: center;
+    font-family:'Varela Round', sans-serif;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
   }
   
-@media (max-aspect-ratio: 16/9) {
-.fullscreen-bg__video {
-    width: 100%;
-    height: 100%;
+@-webkit-keyframes glow {
+from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #9F1FD6, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
 }
-} */
+to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #9F1FD6, 0 0 40px #9F1FD6, 0 0 50px #9F1FD6, 0 0 60px #ff4da6, 0 0 70px #9F1FD6, 0 0 80px #9F1FD6;
+}
+}
+
+#video {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    object-fit: cover;
+     
+}
+video {
+    /* box-sizing: border-box; */
+    width: 100%;   
+}

@@ -1,5 +1,6 @@
 let frames;
 const HZ = 0.5;    // number of redraw events per clock tick
+let minimumRadius = 10;
 class CollissionSystem {
     constructor(particles) {
         this.interval;
@@ -49,7 +50,7 @@ class CollissionSystem {
         }
     }
     printScore() {
-        ctx.font = "50px Arial"
+        ctx.font = "90px Ubuntu Mono"
         ctx.fillStyle = "Red";
         ctx.fillText(message, canvas.width/2 -130, canvas.height/2-30);
     }
@@ -76,28 +77,41 @@ class CollissionSystem {
             smaller.radius = 0;
 			smaller.dead = true;
             // If we just killed the player, callback.
-            console.log(cellA.constructor.name)
+            // console.log(cellA.constructor.name)
 			if (smaller === cellA && cellA.constructor.name === 'Player')
                 this.player_did_die();
             if (smaller === cellB && cellB.constructor.name === 'Player')
                 this.player_did_die();
         }   
     };
+
+    player_win() {
+        ctx.font = "60px Arial"
+        ctx.fillStyle = "green";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = 40;
+        ctx.fillText("You win!!!", canvas.width/2 -150, canvas.height/2);
+        ctx.restore();
+    }
     player_did_die(){
         clearInterval(this.interval)
-        ctx.font = "50px Arial"
-        ctx.fillStyle = "Red";
+        ctx.font = "60px Arial"
+        ctx.fillStyle = "green";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = 40;
         let message;
-        console.log("ayuda")
+        
         if(!mode2P){
             message = "Game Over";
         } 
         else {
             let s = player1.dead ? 2 : 1;
+            ctx.fillStyle = player1.dead ? player1.color : player2.color;
             message =`player ${s} wins!!!`
         }
-        ctx.fillText(message, canvas.width/2 -130, canvas.height/2-30);
+        ctx.fillText(message, canvas.width/2 -150, canvas.height/2);
         ctx.restore();
+        sound.pause();
     }
     draw_background(){
         let backgroundGradient = ctx.createLinearGradient(0,0,0, canvas.height);
@@ -105,6 +119,28 @@ class CollissionSystem {
         backgroundGradient.addColorStop(1,"#000000");
         ctx.fillStyle = backgroundGradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    warning1(player) {
+        let warning = "not enough mass to propel"
+        ctx.font = "40px Arial"
+        ctx.fillStyle = "yellow";
+        if(!player.dead && player.radius < minimumRadius) {
+            ctx.fillText(warning, canvas.width/2 -150, canvas.height/2);
+        }
+        ctx.restore();
+    }
+
+    warning2(player) {
+        ctx.font = "40px Arial"
+        ctx.fillStyle = "yellow";
+        let message;
+        let s = player1.radius  < minimumRadius ? 1 : 2;
+        if(!player.dead && player.radius < minimumRadius) {
+            message = `player ${s} has not enough mass to propel!!!`;
+            ctx.fillText(message, canvas.width/2 -150, canvas.height/2);
+        }
+        ctx.restore();
     }
     
     /**
@@ -123,6 +159,11 @@ class CollissionSystem {
         // the main event-driven simulation loop
         const loop = ()=>{            
             frames++;
+            if(!mode2P) this.warning1(player1)
+            else {
+                this.warning2(player1)
+                this.warning2(player2)
+            }
             // get impending event, discard if invalidated
             let e = this.pq.delMin();
             // console.log(this.pq.size())
@@ -144,10 +185,9 @@ class CollissionSystem {
             // update the priority queue with new collisions involving a or b
             this.predict(a, isRunning);
             this.predict(b, isRunning);
-            /////
+            /////          
             document.onkeydown = (e) => {
-                let minimumRadius = 10;
-                //   Checking if Arrow keys are pressed
+                // Checking if Arrow keys are pressed
                 e.preventDefault();
                 // console.log(e.target)
                 switch (e.keyCode) {
@@ -159,7 +199,7 @@ class CollissionSystem {
                         break;
                     case 38:
                         if(player1.radius < minimumRadius) return
-                        let newCellUp = player1.propel_from(0,1)
+                        let newCellUp = player1.propel_from(0,-1)
                         this.particles.push(newCellUp)
                         this.predict(newCellUp, isRunning);
                         break;
@@ -171,7 +211,7 @@ class CollissionSystem {
                         break;
                     case 40:
                         if(player1.radius < minimumRadius) return
-                        let newCellDown = player1.propel_from(0,-1)
+                        let newCellDown = player1.propel_from(0,1)
                         this.particles.push(newCellDown)
                         this.predict(newCellDown, isRunning);
                         break;
@@ -183,27 +223,29 @@ class CollissionSystem {
                         break;
                     case 87:
                         if(player2.radius < minimumRadius) return
-                        let newCellUp2 = player2.propel_from(0,1)
+                        let newCellUp2 = player2.propel_from(0,-1)
                         this.particles.push(newCellUp2)
                         this.predict(newCellUp2, isRunning);
                         break;
                     case 68:
                         if(player2.radius < minimumRadius) return
-                        let newCellRight2 = player2.propel_from(1,0)
+                        let newCellRight2 = player2.propel_from(1, 0)
                         this.particles.push(newCellRight2)
                         this.predict(newCellRight2, isRunning);
                         break;
                     case 83:
                         if(player2.radius < minimumRadius) return
-                        let newCellDown2 = player2.propel_from(0,-1)
+                        let newCellDown2 = player2.propel_from(0, 1)
                         this.particles.push(newCellDown2)
                         this.predict(newCellDown2, isRunning);
                         break;
                     default:
                         break;
                     }
+                    
               };
         }
+
         this.interval = setInterval(loop, 1000 / 60);
     }
 }

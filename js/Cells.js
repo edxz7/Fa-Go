@@ -14,11 +14,11 @@ const INFINITY = Infinity;
  *  @author Eduardo Chávez Colorado
  */
 class Cell {
-    constructor(rx = 400 + (Math.random()*window.innerWidth-300), 
-                ry = Math.random()*window.innerHeight, 
+    constructor(rx = 0, 
+                ry = 0, 
                 vx = -1*Math.random() + Math.random(), 
                 vy = -1*Math.random() + Math.random(), 
-                radius = Math.random()*50 + 20, 
+                radius = Math.random()*40 + 20, 
                 color = "green"){
             this.rx     = rx;
             this.ry     = ry;
@@ -44,7 +44,9 @@ class Cell {
 
 
 class Particle extends Cell {
-    constructor(rx, ry, vx, vy, radius, color){
+    constructor(rx = 200 + (Math.random()*(canvas.width - 200)),
+                ry = 200 + (Math.random()*(canvas.width - 200)), 
+                vx, vy, radius, color){
         super(rx, ry, vx, vy, radius, color)
         this.e      = 1.0; //restitution coefficient
         this.count  = 0;
@@ -225,7 +227,7 @@ class Particle extends Cell {
         // ctx.fillStyle = gradient
         // ctx.fill();
         ctx.shadowColor = this.color//'#9F1FD6';
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur =50;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         // ctx.fillStyle = "#3CCB69";
