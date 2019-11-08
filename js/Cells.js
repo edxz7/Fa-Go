@@ -14,8 +14,8 @@ const INFINITY = Infinity;
  *  @author Eduardo Chávez Colorado
  */
 class Cell {
-    constructor(rx = 0, 
-                ry = 0, 
+    constructor(rx, 
+                ry, 
                 vx = -1*Math.random() + Math.random(), 
                 vy = -1*Math.random() + Math.random(), 
                 radius = Math.random()*40 + 20, 

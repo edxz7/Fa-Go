@@ -7,7 +7,7 @@ let particles = [];     // the array of particles
 let players = [];
 const player1 = new Player(100, 100, 0, 0, 50, "#9F1FD6");
 canvas.style.display = "none";
-for(let i = 0; i < 20; i++){
+for(let i = 0; i < 15; i++){
     particles.push(new Particle())
 }
 
