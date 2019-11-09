@@ -86,7 +86,8 @@ class CollissionSystem {
     };
 
     player_win() {
-        if(this.particles.length === 0){
+        if(this.particles.length === 0 || particles.reduce((acc,el) => acc + el) === 0){
+            clearInterval(this.interval)
             ctx.font = "60px Arial"
             ctx.fillStyle = "green";
             ctx.shadowColor = "red";
@@ -188,6 +189,7 @@ class CollissionSystem {
             this.predict(a, isRunning);
             this.predict(b, isRunning);
             /////          
+            this.player_win();
             document.onkeydown = (e) => {
                 // Checking if Arrow keys are pressed
                 e.preventDefault();
