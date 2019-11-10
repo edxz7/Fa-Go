@@ -10,31 +10,50 @@
     <body>
         <canvas></canvas>
         <section id="splash-screen">
-                <div id="menu">
-                    <div>
-                        <img src="./assets/fa-go.png" alt="">
-                        <p class="glow"> A survival Horror Game</p>
-                    </div>
-                    <div id = "buttons">
+            <div id="menu">
+                <div>
+                    <img src="./assets/fa-go.png" alt="">
+                    <p class="glow"> A survival Horror Game</p>
+                </div>
+                <div id = "buttons">
+                    <div id="row1">
                         <a class="single" href="#">
                             Single
                         </a>
                         <a class="vs" href="#">
                             VS
-                        </a>
-                        
-                    </div>
+                        </a>  
+                    </div>  
+                    <!-- <div> -->
+                        <a class="controls" href="#">
+                            Controls
+                        </a> 
+                    <!-- </div> -->
                 </div>
-                <div id="video">
-                    <video loop autoplay muted id="myVideo">
-                        <source src="assets/video_bg.mov" type="video/webm">
-                    </video>
-                </div>
-            </section>
-            <canvas></canvas>
-            <script src="./js/MinPQ.js"></script>
-            <script src="./js/Cells.js"></script>
-            <script src="./js/Simulation.js"></script>
-            <script src="./js/main.js"></script>
+            </div>
+            <div id="video">
+                <video loop autoplay muted id="myVideo">
+                    <source src="assets/video_bg.mov" type="video/webm">
+                </video>
+            </div>
+        </section>
+        <section  id="controls">
+            <img src="assets/controls.png" alt="how the controls work">
+            <a class="go-back" href="#">      
+                Go Back
+            </a> 
+        </section>
+        <section id="end-screen">
+            <a class="restart" href="#">
+                restart
+            </a> 
+            <a class="main-menu" href="#">
+                Go back to the main screen 
+            </a> 
+        </section>
+        <script src="./js/MinPQ.js"></script>
+        <script src="./js/Cells.js"></script>
+        <script src="./js/Simulation.js"></script>
+        <script src="./js/main.js"></script>
     </body>
 </html>

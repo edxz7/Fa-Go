@@ -1,6 +1,22 @@
+const endScreen = document.querySelector("#end-screen");
 let frames;
 const HZ = 0.5;    // number of redraw events per clock tick
 let minimumRadius = 10;
+endScreen.style.display = "none"; 
+/**
+ *  The {@code CollisionSystem} class represents a collection of particles
+ *  moving in the unit box, according to the laws of elastic collision.
+ *  This event-based simulation relies on a priority queue.
+ *
+ *  This simulations support the elastic restitution coefficient and angular impulse
+ *  effects for a more robust implementation.
+ *
+ *  <p>
+ *  This code was inspired by the one published on
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *
+ *  @author Eduardo Chávez Colorado
+ */
 class CollissionSystem {
     constructor(particles) {
         this.interval;
@@ -86,7 +102,7 @@ class CollissionSystem {
     };
 
     player_win() {
-        if(this.particles.length === 0 || particles.reduce((acc,el) => acc + el) === 0){
+        if(this.particles.length === 0 || particles.reduce((acc,el) => acc + el.radius, 0) === 0){
             clearInterval(this.interval)
             ctx.font = "60px Arial"
             ctx.fillStyle = "green";
@@ -96,8 +112,11 @@ class CollissionSystem {
             ctx.restore();
         }        
     }
+    //if a player cell has died print the appropriate message in the screen 
     player_did_die(){
-        clearInterval(this.interval)
+        clearInterval(this.interval); //stop the main loop
+        // this.interval = null;
+        // system = null;
         ctx.font = "60px Arial"
         ctx.fillStyle = "green";
         ctx.shadowColor = "red";
@@ -115,6 +134,8 @@ class CollissionSystem {
         ctx.fillText(message, canvas.width/2 -150, canvas.height/2);
         ctx.restore();
         sound.pause();
+        endScreen.style.display = "block"
+
     }
     draw_background(){
         let backgroundGradient = ctx.createLinearGradient(0,0,0, canvas.height);
@@ -131,7 +152,7 @@ class CollissionSystem {
         if(!player.dead && player.radius < minimumRadius) {
             ctx.fillText(warning, canvas.width/2 -150, canvas.height/2);
         }
-        ctx.restore();
+        // ctx.restore();
     }
 
     warning2(player) {
@@ -143,13 +164,13 @@ class CollissionSystem {
             message = `player ${s} has not enough mass to propel!!!`;
             ctx.fillText(message, canvas.width/2 -150, canvas.height/2);
         }
-        ctx.restore();
+        // ctx.restore();
     }
     
     /**
-     * Simulates the system of particles for the specified amount of time.
+     * Simulates the system of particles.
      *
-     * @param  isRunning boolean indicating if the simulation is running 
+     * @param  isRunning is a boolean indicating if the simulation is running 
      */
     simulate(isRunning) {
         // initialize PQ with collision events and redraw event
@@ -169,11 +190,10 @@ class CollissionSystem {
             }
             // get impending event, discard if invalidated
             let e = this.pq.delMin();
-            // console.log(this.pq.size())
             if (!e.isValid()) return;
             let a = e.particleA;
             let b = e.particleB;
-            // physical collision, so update positions, and then simulation clock
+            // physical collision, so update positions, and the simulation clock
             for (var i = 0; i < this.particles.length; i++){ 
                 this.particles[i].move(e.time - this.t);
             }

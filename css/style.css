@@ -25,7 +25,9 @@ body, html {
 
 #buttons{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 a {
@@ -49,6 +51,27 @@ p {
     font-size: 3em;
 }
 
+.row1 {
+    display: flex;
+}
+
+#controls{
+    width: 100vh;
+}
+
+#video {
+    width: 50%;
+    /* height: 100%; */
+    /* overflow: hidden; */
+    object-fit: cover;
+    
+}
+
+video {
+    /* box-sizing: border-box; */
+    width: 100%;   
+}
+
 .glow {
     font-size: 60px;
     color: #fff;
@@ -68,14 +91,3 @@ to {
 }
 }
 
-#video {
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    object-fit: cover;
-     
-}
-video {
-    /* box-sizing: border-box; */
-    width: 100%;   
-}

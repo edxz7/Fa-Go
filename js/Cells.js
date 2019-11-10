@@ -6,8 +6,9 @@ const ctx = canvas.getContext('2d');
 ctx.fillRect(0, 0, canvas.width, canvas.height)
 const INFINITY = Infinity;
 /**
- *  The {@code Cell} class represents a cell as a rigid sphere. This
- *  class will be the parent class from Players and enemies will inherit
+ *  The {@code Cell} class represents a cell as a sphere. This
+ *  class will be the parent class and the Players and Enemies 
+ *  classes will inherit its attributes and methods from it.
  *  <p>
  *  This code was inspired by the one published on
  *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
@@ -42,7 +43,13 @@ class Cell {
     }
 }
 
-
+/**
+ *  The {@code Particle} class represents a particle as a rigid sphere
+ *  <p>
+ *  This code was inspired by the one published on
+ *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ *  @author Eduardo Chávez Colorado
+ */
 class Particle extends Cell {
     constructor(rx = 200 + (Math.random()*(canvas.width - 200)),
                 ry = 200 + (Math.random()*(canvas.width - 200)), 
@@ -50,7 +57,7 @@ class Particle extends Cell {
         super(rx, ry, vx, vy, radius, color)
         this.e      = 1.0; //restitution coefficient
         this.count  = 0;
-        this.score  = 0;
+        
     }
     /**
      * Moves this particle in a straight line (based on its velocity)
@@ -241,6 +248,7 @@ class Player extends Cell {
     constructor(rx, ry, vx, vy, radius, color){
         super(rx, ry, vx, vy, radius, color)
         this.friction=0.999;
+        this.score  = 0;
     }
     move(dt) {
         if(this.rx + this.radius > window.innerWidth || this.rx - this.radius < 0) 
