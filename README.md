@@ -1,6 +1,7 @@
 # Fa-Go
 
-**Fa-Go** is a survival horror game where you need to think about your next move to be able to survive
+**Fa-Go** is a survival horror game where you need to use the enviroment and your intelligence to be able to survive.
+You can play the game <a href="https://edxz7.github.io/Fa-Go/">here</a>
 
 <img src = "img/Screen Shot 2019-11-09 at 18.07.49.png" width="500">
 
