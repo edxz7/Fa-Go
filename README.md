@@ -1,6 +1,6 @@
 # Fa-Go
 
-A survival horror game build on top of the same code used to model a gas of N rigid spheres with adjustable restitution coefficient
+**Fa-Go** is a survival horror game where you need to think about your next move to be able to survive
 
 <img src = "img/Screen Shot 2019-11-09 at 18.07.49.png" width="500">
 
@@ -9,18 +9,18 @@ A survival horror game build on top of the same code used to model a gas of N ri
 About the game
 ============
 
-You are a cell living in and hostile enviroment where other cells are trying to survive. The rules aare easy, if you touch a cell smaller than you eat it and if a bigger cell touch you it eats you. In the versus mode you compete to eat to the other player
+You are a cell that lives in a hostile enviroment where other cells are trying to devour you. The rules are easy, if you touch a cell smaller than you, you devour it but if it's bigger, it will devour you. In the versus mode you compete with a friend to eat it before he eats you. You can use the enviroment in your favor to have most chances of survive. Finally, the cells of the same color don't eat each other (they collide as rigid spheres) but if they are of different colors, they can eat each other.  
 
-This game can be played in single player mode or in a two player versus mode. 
+This game can be played in single player mode or in a two player mode. The game was made using an algortihm that I wrote in java to simulate a gas of rigid spheres with adjustable restitution coefficient, and I found fun made a game with it.
 
 To do list
 ============
 
-Expand the world from fix full screen to a scrollable world with a follow up camera 
+Expand the world from fix full screen to a scrollable world with a follow up camera for the main player.
+
 
 Credits
 ============
-* <a href="https://github.com/merrymustard">Maria Santos</a> designs and helps me to make the composition for the screen menu.   
-* The code to perform the mass absortion adapted from the code. 
+* <a href="https://github.com/merrymustard">Maria Santos</a> designs and helps me to make the composition for the screen menu. 
 * The current music of the game and all its rights belongs to kudasai it was taken without permision from the artist. I'm going to fix that as soon possible. 
 
