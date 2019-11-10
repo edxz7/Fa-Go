@@ -2,7 +2,7 @@
 
 A survival horror game build on top of the same code used to model a gas of N rigid spheres with adjustable restitution coefficient
 
-
+<img src = "img/Screen Shot 2019-11-09 at 18.07.49.png" width="500">
 
 
 
