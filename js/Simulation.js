@@ -90,7 +90,7 @@ class CollissionSystem {
 	
 		// Check if we just killed one of the cells
 		if (smaller.radius <=2) {
-            smaller.radius = 0;
+            smaller.radius = NaN;
 			smaller.dead = true;
             // If we just killed the player, callback.
             // console.log(cellA.constructor.name)
@@ -102,7 +102,7 @@ class CollissionSystem {
     };
 
     player_win() {
-        if(this.particles.length === 0 || particles.reduce((acc,el) => acc + el.radius, 0) === 0){
+        if(this.particles.length === 0 ){
             clearInterval(this.interval)
             ctx.font = "60px Arial"
             ctx.fillStyle = "green";
