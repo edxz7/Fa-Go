@@ -32,6 +32,9 @@ function restart(){
     player1 = new Player(100, 100, 0, 0, 50, "#9F1FD6");
     generateCells(12);
     system = new CollissionSystem(particles);
+    if(mode2P){
+        player2 = new Player(canvas.width- 200, canvas.height-200, 0, 0, 50, "#3CCB69");
+    }
     options.style.display   = "none";
 }
 
@@ -58,7 +61,6 @@ window.onload = () => {
     initGame.addEventListener('click', e => {
         if(e.target.classList.contains('vs')){
             player2 = new Player(canvas.width- 200, canvas.height-200, 0, 0, 50, "#3CCB69");
-            mode = true;
             mode2P = true;
             game.style.display = "none"
             canvas.style.display = "block";
