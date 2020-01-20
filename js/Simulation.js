@@ -115,7 +115,8 @@ class CollissionSystem {
             ctx.shadowBlur = 40;
             ctx.fillText("You win!!!", canvas.width/2 -150, canvas.height/2);
             ctx.restore();
-        }        
+            endScreen.style.display = "block"        
+        }
     }
     //if a player cell has died print the appropriate message in the screen 
     player_did_die(){
