@@ -2,8 +2,8 @@
 body, html {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: black;
 }
 
@@ -14,8 +14,8 @@ body, html {
     overflow: hidden;
 }
 
+
 #menu {
-    width: 50%;
     height: 100%; 
     display: flex;
     flex-direction: column;
@@ -29,6 +29,23 @@ body, html {
     align-items: center;
     justify-content: space-evenly;
 }
+
+#options
+{
+    bottom: 60%;
+    left: 25%;
+    position: absolute;
+    width: 100%;
+}
+
+.main-menu{
+    color: red!important;
+}
+
+.restart {
+    color: red!important;
+}
+
 
 a {
     border: 1px solid white;
@@ -51,25 +68,36 @@ p {
     font-size: 3em;
 }
 
-.row1 {
-    display: flex;
-}
-
 #controls{
     width: 100vh;
 }
 
-#video {
-    width: 50%;
-    /* height: 100%; */
-    /* overflow: hidden; */
-    object-fit: cover;
-    
+#controls h1{
+    font-size: 3em;
+    color: #fff;
+    text-align: center;
+}
+
+#controls p{
+    font-size: 1.5em;
+    color: #fff;
+}
+
+#controls .go-back{
+    display: flex;
+    justify-content:center;
 }
 
 video {
-    /* box-sizing: border-box; */
-    width: 100%;   
+    margin-left: 80px;
+    box-sizing: border-box;
+    height: 100vh;   
+}
+
+@media(max-width:756px){
+    video{
+        display: none;
+    }
 }
 
 .glow {

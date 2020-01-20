@@ -1,7 +1,7 @@
-const endScreen = document.querySelector("#end-screen");
+const endScreen = document.querySelector("#options");
 let frames;
 const HZ = 0.5;    // number of redraw events per clock tick
-let minimumRadius = 10;
+let minimumRadius = 20;
 endScreen.style.display = "none"; 
 /**
  *  The {@code CollisionSystem} class represents a collection of particles
@@ -39,6 +39,7 @@ class CollissionSystem {
         if (isRunning) this.pq.insert(new Event(this.t + dtX, particleA, null));
         if (isRunning) this.pq.insert(new Event(this.t + dtY, null, particleA));
     }
+
     // redraw all particles
     redraw(isRunning) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -100,6 +101,10 @@ class CollissionSystem {
                 this.player_did_die();
         }   
     };
+
+    restart() {
+        clearInterval(this.interval);
+    }
 
     player_win() {
         if(this.particles.length === 0 ){

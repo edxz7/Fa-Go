@@ -8,7 +8,19 @@
         <title>Document</title>
     </head>
     <body>
-        <canvas></canvas>
+        <div id="game">
+            <canvas></canvas>
+        </div>
+
+        <menu id="options">
+            <a class="main-menu" href="#">
+                Menu
+            </a>
+            <a class="restart" href="#">
+                Restart
+            </a>  
+        </menu>
+
         <section id="splash-screen">
             <div id="menu">
                 <div>
@@ -33,23 +45,21 @@
             </div>
             <div id="video">
                 <video loop autoplay muted id="myVideo">
-                    <source src="assets/video_bg.mov" type="video/webm">
+                    <source src="assets/video_bg.mp4" type="video/webm">
                 </video>
             </div>
         </section>
         <section  id="controls">
-            <img src="assets/controls.png" alt="how the controls work">
+            <h1>Game rules</h1>
+            <p>Single mode: You win if you eat all the cell on the screen</p>
+            <p>VS mode:     You win if you eat the other player</p>
+            <p>Press Enter to Pause the game</p>
+            <img style="width: 50vw;" src="assets/controls.png" alt="how the controls work">
             <a class="go-back" href="#">      
                 Go Back
             </a> 
         </section>
         <section id="end-screen">
-            <a class="restart" href="#">
-                restart
-            </a> 
-            <a class="main-menu" href="#">
-                Go back to the main screen 
-            </a> 
         </section>
         <script src="./js/MinPQ.js"></script>
         <script src="./js/Cells.js"></script>
