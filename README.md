@@ -17,11 +17,13 @@ This game can be played in single player mode or in a two player mode. The game 
 To do list
 ============
 
-Expand the world from fix full screen to a scrollable world with a follow up camera for the main player.
+* Expand the world from fix full screen to a scrollable world with a follow up camera for the main player.
+* Add scores
+* Add cells of different color, if two cell of the same color touch, the bigger eats the smaller, if they are of the same color, they simply bounce.  
 
 
 Credits
 ============
-* <a href="https://github.com/merrymustard">Maria Santos</a> designs and helps me to make the composition for the screen menu. 
+* <a href="https://github.com/merrymustard">Maria Santos</a> designs and helps me to make the composition for the start screen . 
 * The current music of the game and all its rights belongs to kudasai it was taken without permision from the artist. I'm going to fix that as soon possible. 
 
